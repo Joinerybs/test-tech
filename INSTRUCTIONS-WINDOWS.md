@@ -1,10 +1,6 @@
-# Instructions - Test Technique
+# Instructions - Test Technique (Windows)
 
 **Durée estimée : 4 heures**
-
-> **📋 Instructions spécifiques à votre système d'exploitation :**
-> - [Instructions pour Linux/macOS](INSTRUCTIONS-LINUX.md)
-> - [Instructions pour Windows](INSTRUCTIONS-WINDOWS.md)
 
 L'objectif de ce test est d'évaluer votre capacité à améliorer une application existante en identifiant et en résolvant des problématiques réelles de développement.
 
@@ -17,6 +13,13 @@ Vous disposez d'une application de gestion de tâches (Task Manager) avec :
 
 L'application fonctionne actuellement mais présente plusieurs problèmes de conception et d'implémentation.
 
+## Prérequis
+
+- Node.js (v18 ou supérieur)
+- pnpm (`npm install -g pnpm`)
+- Docker Desktop pour Windows ([Guide d'installation](DOCKER-INSTALL.md))
+- Git for Windows (inclut Git Bash)
+
 ## Processus de travail
 
 ### 1. Fork et clonage du projet
@@ -27,19 +30,21 @@ L'application fonctionne actuellement mais présente plusieurs problèmes de con
    - Sélectionnez votre compte personnel comme destination
 
 2. **Cloner votre fork**
-   ```bash
+   
+   **PowerShell / CMD :**
+   ```powershell
    git clone https://github.com/VOTRE-USERNAME/test-tech.git
    cd test-tech
    ```
 
 3. **Installer les dépendances**
-   ```bash
+   ```powershell
    pnpm install
    ```
 
 ### 2. Créer une branche de travail
 
-```bash
+```powershell
 # Créez une branche descriptive pour vos modifications
 git checkout -b feature/mongodb-validation-error-handling
 ```
@@ -50,7 +55,7 @@ git checkout -b feature/mongodb-validation-error-handling
 - Faites des commits réguliers avec des messages clairs
 - Testez votre code au fur et à mesure
 
-```bash
+```powershell
 # Exemple de commits
 git add .
 git commit -m ":sparkles: feat: ajout du schéma Mongoose pour les tâches"
@@ -60,7 +65,7 @@ git commit -m ":bug: fix: gestion des erreurs API dans le frontend"
 
 ### 4. Pousser vos modifications
 
-```bash
+```powershell
 # Poussez votre branche vers votre fork
 git push origin feature/mongodb-validation-error-handling
 ```
@@ -182,25 +187,22 @@ git push origin feature/mongodb-validation-error-handling
 
 - Vous pouvez installer les dépendances nécessaires
 - **MongoDB démarre automatiquement** avec la commande `pnpm dev`
-- Si l'auto-démarrage échoue, utilisez : `bash scripts/start-mongodb.sh`
+- Si l'auto-démarrage échoue, démarrez MongoDB manuellement (voir commandes ci-dessous)
 - N'hésitez pas à refactoriser le code existant si besoin
 - La qualité est plus importante que la quantité
 - En cas de blocage, documentez votre approche et les difficultés rencontrées
 
 ## Commandes utiles
 
-```bash
+**PowerShell :**
+```powershell
 # Installer les dépendances
 pnpm install
 
 # Lancer l'application (démarre automatiquement MongoDB avec Docker)
 pnpm dev
 
-# Si MongoDB ne démarre pas automatiquement :
-bash scripts/start-mongodb.sh
-
-# Gestion manuelle de MongoDB :
-export DOCKER_HOST=unix:///var/run/docker.sock
+# Gestion manuelle de MongoDB (si nécessaire) :
 docker compose up -d      # Démarrer MongoDB
 docker compose ps         # Vérifier le statut
 docker compose down       # Arrêter MongoDB
@@ -211,6 +213,74 @@ pnpm --filter backend dev
 # Frontend seul
 pnpm --filter frontend dev
 ```
+
+**CMD :**
+```cmd
+REM Installer les dépendances
+pnpm install
+
+REM Lancer l'application
+pnpm dev
+
+REM Gestion manuelle de MongoDB
+docker compose up -d
+docker compose ps
+docker compose down
+```
+
+**Git Bash (alternative pour les scripts bash) :**
+```bash
+# Si MongoDB ne démarre pas automatiquement avec pnpm dev
+bash scripts/start-mongodb.sh
+
+# Variable d'environnement si nécessaire
+export DOCKER_HOST=unix:///var/run/docker.sock
+```
+
+## Dépannage Windows
+
+### Docker Desktop n'est pas démarré
+1. Ouvrez Docker Desktop depuis le menu Démarrer
+2. Attendez que Docker soit complètement démarré (icône verte)
+3. Relancez `pnpm dev`
+
+### Permission refusée avec Docker
+- Assurez-vous que votre utilisateur est dans le groupe `docker-users`
+- Redémarrez votre session Windows si vous venez d'installer Docker
+
+### Port déjà utilisé
+
+**PowerShell :**
+```powershell
+# Vérifier les ports utilisés
+netstat -ano | findstr :3000  # Frontend
+netstat -ano | findstr :3001  # Backend
+netstat -ano | findstr :27017 # MongoDB
+
+# Tuer un processus si nécessaire
+taskkill /PID <PID> /F
+```
+
+**CMD :**
+```cmd
+REM Vérifier les ports utilisés
+netstat -ano | findstr :3000
+
+REM Tuer un processus
+taskkill /PID <PID> /F
+```
+
+### WSL2 requis pour Docker
+Si Docker vous demande d'activer WSL2 :
+1. Ouvrez PowerShell en tant qu'administrateur
+2. Exécutez : `wsl --install`
+3. Redémarrez votre ordinateur
+4. Relancez Docker Desktop
+
+### Scripts bash ne fonctionnent pas
+- Option 1 : Utilisez Git Bash (inclus avec Git for Windows)
+- Option 2 : Utilisez directement `docker compose up -d` au lieu du script bash
+- Option 3 : Installez WSL2 et utilisez un terminal Linux
 
 ---
 

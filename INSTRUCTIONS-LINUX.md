@@ -1,10 +1,6 @@
-# Instructions - Test Technique
+# Instructions - Test Technique (Linux/macOS)
 
 **Durée estimée : 4 heures**
-
-> **📋 Instructions spécifiques à votre système d'exploitation :**
-> - [Instructions pour Linux/macOS](INSTRUCTIONS-LINUX.md)
-> - [Instructions pour Windows](INSTRUCTIONS-WINDOWS.md)
 
 L'objectif de ce test est d'évaluer votre capacité à améliorer une application existante en identifiant et en résolvant des problématiques réelles de développement.
 
@@ -16,6 +12,13 @@ Vous disposez d'une application de gestion de tâches (Task Manager) avec :
 - Une architecture monorepo avec pnpm
 
 L'application fonctionne actuellement mais présente plusieurs problèmes de conception et d'implémentation.
+
+## Prérequis
+
+- Node.js (v18 ou supérieur)
+- pnpm (`npm install -g pnpm`)
+- Docker et Docker Compose ([Guide d'installation](DOCKER-INSTALL.md))
+- Git
 
 ## Processus de travail
 
@@ -210,6 +213,28 @@ pnpm --filter backend dev
 
 # Frontend seul
 pnpm --filter frontend dev
+```
+
+## Dépannage
+
+### Docker ne se connecte pas
+```bash
+# Vérifier que Docker est en cours d'exécution
+docker ps
+
+# Si nécessaire, définir la variable DOCKER_HOST
+export DOCKER_HOST=unix:///var/run/docker.sock
+```
+
+### Port déjà utilisé
+```bash
+# Vérifier les ports utilisés
+lsof -i :3000  # Frontend
+lsof -i :3001  # Backend
+lsof -i :27017 # MongoDB
+
+# Tuer un processus si nécessaire
+kill -9 <PID>
 ```
 
 ---
