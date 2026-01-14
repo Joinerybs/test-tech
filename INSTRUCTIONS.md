@@ -13,6 +13,70 @@ Vous disposez d'une application de gestion de tâches (Task Manager) avec :
 
 L'application fonctionne actuellement mais présente plusieurs problèmes de conception et d'implémentation.
 
+## Processus de travail
+
+### 1. Fork et clonage du projet
+
+1. **Forker le repository**
+   - Rendez-vous sur le repository GitHub du projet
+   - Cliquez sur le bouton "Fork" en haut à droite
+   - Sélectionnez votre compte personnel comme destination
+
+2. **Cloner votre fork**
+   ```bash
+   git clone https://github.com/VOTRE-USERNAME/test-tech.git
+   cd test-tech
+   ```
+
+3. **Installer les dépendances**
+   ```bash
+   pnpm install
+   ```
+
+### 2. Créer une branche de travail
+
+```bash
+# Créez une branche descriptive pour vos modifications
+git checkout -b feature/mongodb-validation-error-handling
+```
+
+### 3. Développer vos solutions
+
+- Travaillez sur les tâches décrites ci-dessous
+- Faites des commits réguliers avec des messages clairs
+- Testez votre code au fur et à mesure
+
+```bash
+# Exemple de commits
+git add .
+git commit -m ":sparkles: feat: ajout du schéma Mongoose pour les tâches"
+git commit -m ":sparkles: feat: implémentation de la validation des données"
+git commit -m ":bug: fix: gestion des erreurs API dans le frontend"
+```
+
+### 4. Pousser vos modifications
+
+```bash
+# Poussez votre branche vers votre fork
+git push origin feature/mongodb-validation-error-handling
+```
+
+### 5. Ouvrir une Pull Request
+
+1. Rendez-vous sur votre fork GitHub
+2. Cliquez sur "Compare & pull request"
+3. Assurez-vous que la PR pointe vers le repository original
+4. Rédigez une description claire :
+   - Résumé des modifications apportées
+   - Solutions implémentées pour chaque tâche
+   - Points techniques importants
+   - Éventuelles difficultés rencontrées
+5. Soumettez la Pull Request
+
+**Note importante :** La Pull Request est votre livrable principal. Assurez-vous qu'elle soit bien documentée et que le code soit propre avant de la soumettre.
+
+---
+
 ## Tâches à réaliser
 
 ### 1. Migration vers une base de données MongoDB (2-3h)
