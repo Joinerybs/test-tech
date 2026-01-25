@@ -52,6 +52,10 @@ export class TasksService {
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
+  async getTasksByStatus(status: string): Promise<Task[]> {
+    return await this.taskModel.find({ status: status }).sort({ createdAt: -1 }).exec();
+  }
+
   async getStatistics() {
     const tasks = await this.taskModel.find().exec();
     const stats = {
