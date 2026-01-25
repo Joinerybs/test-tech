@@ -46,12 +46,6 @@ export class TasksService {
     return !!result; //True si supprimé
   }
 
-  getTasksByStatus(status: string): Task[] {
-    return this.tasks
-      .filter((task) => task.status === status)
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-  }
-
   async getTasksByStatus(status: string): Promise<Task[]> {
     return await this.taskModel.find({ status: status }).sort({ createdAt: -1 }).exec();
   }
