@@ -32,16 +32,15 @@ export class TasksService {
     return await newTask.save();
   }
 
-  updateTask(id: string, updateTaskDto: UpdateTaskDto): Task | undefined {
-    const task = this.getTaskById(id);
-    if (!task) {
-      return undefined;
+  async updateTask(id: string, updateTaskDto: UpdateTaskDto): Promise<Task> {
+    const updatedTask = await this.taskModel
+      .findByIdAndUpdate(id, updateTaskDto, { new: true })
+      .exec();
+      
+    if (!updatedTask) {
+      throw new NotFoundException(`Task with ID "${id}" not found`);
     }
-
-    Object.assign(task, updateTaskDto);
-    task.updatedAt = new Date();
-
-    return task;
+    return updatedTask;
   }
 
   deleteTask(id: string): boolean {
