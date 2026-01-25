@@ -33,9 +33,7 @@ export class TasksService {
   }
 
   async updateTask(id: string, updateTaskDto: UpdateTaskDto): Promise<Task> {
-    const updatedTask = await this.taskModel
-      .findByIdAndUpdate(id, updateTaskDto, { new: true })
-      .exec();
+    const updatedTask = await this.taskModel.findByIdAndUpdate(id, updateTaskDto, { new: true }).exec();
       
     if (!updatedTask) {
       throw new NotFoundException(`Task with ID "${id}" not found`);
@@ -43,14 +41,9 @@ export class TasksService {
     return updatedTask;
   }
 
-  deleteTask(id: string): boolean {
-    const index = this.tasks.findIndex((task) => task.id === id);
-    if (index === -1) {
-      return false;
-    }
-
-    this.tasks.splice(index, 1);
-    return true;
+  async deleteTask(id: string): Promise<boolean> {
+    const result = await this.taskModel.findByIdAndDelete(id).exec();
+    return !!result; //True si supprimé
   }
 
   getTasksByStatus(status: string): Task[] {
@@ -59,23 +52,19 @@ export class TasksService {
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
-  getStatistics() {
+  async getStatistics() {
+    const tasks = await this.taskModel.find().exec();
     const stats = {
-      total: this.tasks.length,
-      todo: 0,
-      inProgress: 0,
-      done: 0,
-      byPriority: { low: 0, medium: 0, high: 0 },
+      total: tasks.length,
+      todo: tasks.filter(t=> t.status === 'todo').length,
+      inProgress: tasks.filter(t => t.status === 'in-progress').length,
+      done: tasks.filter(t => t.status === 'done').length,
+      byPriority: { 
+        low: tasks.filter(t => t.priority === 'low').length, 
+        medium: tasks.filter(t => t.priority === 'medium').length, 
+        high: tasks.filter(t => t.priority === 'high').length 
+      },
     };
-
-    for (const task of this.tasks) {
-      if (task.status === 'todo') stats.todo++;
-      if (task.status === 'in-progress') stats.inProgress++;
-      if (task.status === 'done') stats.done++;
-
-      stats.byPriority[task.priority]++;
-    }
-
     return stats;
   }
 }
