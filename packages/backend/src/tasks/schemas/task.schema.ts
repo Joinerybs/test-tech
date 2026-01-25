@@ -2,6 +2,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 export type TaskDocument = Task & Document;
 
+/**
+ * Schéma qui représente une tâche dans la base de données.
+ */
 @Schema({ 
     timestamps: true,
     toJSON: {
@@ -15,18 +18,23 @@ export type TaskDocument = Task & Document;
  })
 
 export class Task {
+  /** Titre de la tâche - Obligatoire */
   @Prop({ required: true })
   title: string;
 
+  /** Description de la tâche */
   @Prop()
   description: string;
 
+  /** Statut de la tâche*/
   @Prop({ default: 'todo' })
   status: string;
 
+  /** Niveau de priorité de la tâche*/
   @Prop({default: 'medium'})
   priority: string;
 
+  /** Liste associés à la tâche */
   @Prop([String]) // Ici je créé un tableau de chaînes de caractères pour la partie tags
   tags: string[];
 }
