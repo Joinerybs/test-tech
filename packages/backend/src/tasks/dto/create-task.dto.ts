@@ -55,7 +55,6 @@ export class CreateTaskDto {
 
   /**
    * Liste de labels pour catégoriser la tâche.
-
    */
   @IsArray({ message: 'Les tags doivent être un tableau de chaînes' })
   @IsString({ each: true, message: 'Chaque tag doit être une chaîne de caractères' })
