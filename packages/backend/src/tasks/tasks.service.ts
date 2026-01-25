@@ -1,46 +1,22 @@
-import { Injectable } from '@nestjs/common';
-import type { CreateTaskDto, Task, UpdateTaskDto } from './task.interface';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Task, TaskDocument } from './schemas/task.schema';
+import type { CreateTaskDto, UpdateTaskDto } from './task.interface';
 
 @Injectable()
 export class TasksService {
-  private tasks: Task[] = [
-    {
-      id: '1',
-      title: 'Implémenter authentification',
-      description: 'Ajouter JWT et guards',
-      status: 'todo',
-      priority: 'high',
-      createdAt: new Date('2024-01-10'),
-      updatedAt: new Date('2024-01-10'),
-      tags: ['backend', 'security'],
-    },
-    {
-      id: '2',
-      title: 'Optimiser les requêtes',
-      description: 'Résoudre le problème N+1',
-      status: 'in-progress',
-      priority: 'high',
-      createdAt: new Date('2024-01-11'),
-      updatedAt: new Date('2024-01-12'),
-      tags: ['backend', 'performance'],
-    },
-    {
-      id: '3',
-      title: 'Améliorer UI',
-      description: 'Refactoriser les composants',
-      status: 'todo',
-      priority: 'medium',
-      createdAt: new Date('2024-01-12'),
-      updatedAt: new Date('2024-01-12'),
-      tags: ['frontend', 'ux'],
-    },
-  ];
+  constructor(
+    @InjectModel(Task.name) private taskModel: Model<TaskDocument>
+  ){}
 
-  getAllTasks(): Task[] {
-    return this.tasks.sort((a, b) => {
-      const priorityWeight = { high: 3, medium: 2, low: 1 };
-      return priorityWeight[b.priority] - priorityWeight[a.priority];
-    });
+  async getAllTasks(): Promise<Task[]> {
+    const tasks = await this.taskModel.find().exec();
+    const priorityWeight = { high: 3, medium: 2, low: 1 };
+    
+    return tasks.sort((a, b) => 
+      (priorityWeight[b.priority] || 0) - (priorityWeight[a.priority] || 0)
+    );
   }
 
   getTaskById(id: string): Task | undefined {
