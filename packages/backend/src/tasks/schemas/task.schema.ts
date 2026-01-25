@@ -6,7 +6,7 @@ export type TaskDocument = Task & Document;
  * Schéma qui représente une tâche dans la base de données.
  */
 @Schema({ 
-    timestamps: true,
+    timestamps: true, //Mangodb génère les dates tout seul
     toJSON: {
     virtuals: true,
     versionKey: false,
