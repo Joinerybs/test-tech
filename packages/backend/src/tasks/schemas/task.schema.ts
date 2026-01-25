@@ -8,12 +8,12 @@ export type TaskDocument = Task & Document;
     virtuals: true,
     versionKey: false,
     transform: (doc, ret) => {
-      delete ret._id; // On retire l'original pour n'avoir que 'id'
+      delete ret._id; // Ligne nécessaire afin de s'assurer que l'id que l'on envoi et celui que Mongodb a sont les mêmes
       return ret;
     },
   },
  })
- 
+
 export class Task {
   @Prop({ required: true })
   title: string;
