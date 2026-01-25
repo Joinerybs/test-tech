@@ -27,20 +27,9 @@ export class TasksService {
     return task;
   }
 
-  createTask(createTaskDto: CreateTaskDto): Task {
-    const newTask: Task = {
-      id: Date.now().toString(),
-      title: createTaskDto.title,
-      description: createTaskDto.description,
-      status: 'todo',
-      priority: createTaskDto.priority || 'medium',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      tags: createTaskDto.tags || [],
-    };
-
-    this.tasks.push(newTask);
-    return newTask;
+  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+    const newTask = new this.taskModel(createTaskDto);
+    return await newTask.save();
   }
 
   updateTask(id: string, updateTaskDto: UpdateTaskDto): Task | undefined {
